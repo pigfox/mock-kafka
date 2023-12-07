@@ -24,7 +24,14 @@ type KafkaConsumer interface {
 }
 
 // MockKafkaProducer is a mock implementation of KafkaProducer for testing purposes.
-type MockKafkaProducer struct{}
+type MockKafkaProducer struct {
+	IsClosed bool
+}
+
+// MockKafkaConsumer is a mock implementation of KafkaConsumer for testing purposes.
+type MockKafkaConsumer struct {
+	IsClosed bool
+}
 
 func (p *MockKafkaProducer) ProduceMessage(topic string, key, value []byte) error {
 	// Implement your mock logic for producing a message
@@ -33,13 +40,10 @@ func (p *MockKafkaProducer) ProduceMessage(topic string, key, value []byte) erro
 }
 
 func (p *MockKafkaProducer) Close() error {
-	// Implement your mock logic for closing the producer
+	p.IsClosed = true
 	fmt.Println("Mock producer: Closed")
 	return nil
 }
-
-// MockKafkaConsumer is a mock implementation of KafkaConsumer for testing purposes.
-type MockKafkaConsumer struct{}
 
 func (c *MockKafkaConsumer) ConsumeMessages(topic string, handler func(key, value []byte) error) error {
 	// Implement your mock logic for consuming messages
@@ -48,7 +52,7 @@ func (c *MockKafkaConsumer) ConsumeMessages(topic string, handler func(key, valu
 }
 
 func (c *MockKafkaConsumer) Close() error {
-	// Implement your mock logic for closing the consumer
+	c.IsClosed = true
 	fmt.Println("Mock consumer: Closed")
 	return nil
 }
@@ -154,7 +158,7 @@ func main() {
 	}()
 
 	// Wait for a while to allow the consumer to process messages
-	time.Sleep(5 * time.Second)
+	time.Sleep(2 * time.Second)
 
 	// Mock Kafka producer and consumer for testing
 	mockProducer := &MockKafkaProducer{}
