@@ -1,7 +1,10 @@
 // main_test.go
 package main
 
-import "testing"
+import (
+	"github.com/stretchr/testify/assert"
+	"testing"
+)
 
 func TestActualKafkaProducer(t *testing.T) {
 	actualProducer, err := NewKafkaProducer([]string{"localhost:9092"})
@@ -14,7 +17,7 @@ func TestActualKafkaProducer(t *testing.T) {
 	if err != nil {
 		t.Fatal("Error producing test message with actual Kafka producer:", err)
 	}
-	// No assertion is made in this simple example. You might want to use a Kafka testing library or verify the produced message in a real Kafka environment.
+	assert.NoError(t, err, "Error producing test message with actual Kafka producer")
 }
 
 func TestActualKafkaConsumer(t *testing.T) {
@@ -31,5 +34,5 @@ func TestActualKafkaConsumer(t *testing.T) {
 	if err != nil {
 		t.Fatal("Error consuming messages with actual Kafka consumer:", err)
 	}
-	// No assertion is made in this simple example. You might want to use a Kafka testing library or verify the consumed message in a real Kafka environment.
+	assert.NoError(t, err, "Error consuming messages with actual Kafka consumer")
 }
